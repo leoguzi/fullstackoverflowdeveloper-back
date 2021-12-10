@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "sing-me-a-song-back",
   "version": "1.0.0",
   "description": "",
@@ -8,7 +7,7 @@
     "dev": "NODE_ENV=dev nodemon src/server.ts",
     "test": "NODE_ENV=test npx jest -i --verbose",
     "test-watch": "NODE_ENV=test npx jest -i --verbose --watch",
-    "start": "NODE_ENV=prod node src/server.js"
+    "start": "NODE_ENV=prod ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",
