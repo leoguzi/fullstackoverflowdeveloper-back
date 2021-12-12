@@ -24,6 +24,7 @@ async function newQuestion(req: Request, res: Response, next: NextFunction) {
 
 async function getQuestion(req: Request, res: Response, next: NextFunction) {
   const idQuestion: number = Number(req.params.id);
+
   try {
     const answer = await answersRepository.fetchAnswer(idQuestion);
     if (!answer) {
@@ -32,8 +33,12 @@ async function getQuestion(req: Request, res: Response, next: NextFunction) {
       );
       return res.status(200).send(question);
     }
-    return res.sendStatus(200);
+    const question = await questionService.findAnsweredQuestion(answer);
+    return res.status(200).send(question);
   } catch (error) {
+    if (error instanceof QuestionsError) {
+      return res.status(404).send({ message: error.message });
+    }
     return next(error);
   }
 }

@@ -15,7 +15,7 @@ async function userAuthentication(
   const token = req.headers.authorization.replace('Bearer ', '');
 
   try {
-    const user = await userRepository.fetchtUser(token);
+    const user = await userRepository.fetchtUserByToken(token);
     if (!user) {
       return next();
     }

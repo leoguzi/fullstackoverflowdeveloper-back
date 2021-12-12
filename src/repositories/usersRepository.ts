@@ -13,7 +13,7 @@ async function registerUser(user: UserSE): Promise<UserDB> {
   return userDB;
 }
 
-async function fetchtUser(token: string): Promise<UserDB> {
+async function fetchtUserByToken(token: string): Promise<UserDB> {
   const result = await connection.query(`SELECT * FROM users WHERE token=$1;`, [
     token,
   ]);
@@ -23,4 +23,15 @@ async function fetchtUser(token: string): Promise<UserDB> {
   }
   return user;
 }
-export { registerUser, fetchtUser };
+
+async function fetchtUserById(id: number): Promise<UserDB> {
+  const result = await connection.query(`SELECT * FROM users WHERE id=$1;`, [
+    id,
+  ]);
+  let user: UserDB;
+  if (result.rowCount > 0) {
+    user = result.rows[0];
+  }
+  return user;
+}
+export { registerUser, fetchtUserByToken, fetchtUserById };

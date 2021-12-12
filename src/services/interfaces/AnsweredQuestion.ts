@@ -1,6 +1,6 @@
 import { NotAnsweredQuestion } from './NotAnsweredQuestion';
 
-interface AnsweredQuestion extends NotAnsweredQuestion {
+export interface AnsweredQuestion extends NotAnsweredQuestion {
   answeredAt: Date;
   answeredBy: string;
   answer: string;
