@@ -1,0 +1,3 @@
+interface AnswerREQ {
+  answer: string;
+}

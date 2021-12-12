@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import questionSchema from '../validation/questionSchema';
 import * as questionService from '../services/questionsService';
+import * as answerRepository from '../repositories/answersRepository';
 import { QuestionREQ } from './interfaces/QuestionREQ';
 
 async function newQuestion(req: Request, res: Response, next: NextFunction) {
@@ -19,10 +20,14 @@ async function newQuestion(req: Request, res: Response, next: NextFunction) {
 }
 
 async function getQuestion(req: Request, res: Response, next: NextFunction) {
-  const { question, student, tags } = req.body;
-
+  const idQuestion: number = Number(req.params.id);
+  const answer = await answerRepository.fetchAnswer(idQuestion);
+  if (!answer) {
+    const question = await questionService.findNotAnsweredQuestion(idQuestion);
+    return res.status(200).send(question);
+  }
+  return res.sendStatus(200);
   try {
-    return res.sendStatus(200);
   } catch (error) {
     return next(error);
   }

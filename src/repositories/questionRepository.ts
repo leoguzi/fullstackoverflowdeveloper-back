@@ -1,5 +1,7 @@
 import connection from '../database';
+
 import { QuestionSE } from '../services/interfaces/QuestionSE';
+import { QuestionDB } from '../repositories/interfaces/QuestionDB';
 
 async function registerQuestion(questionSE: QuestionSE): Promise<number> {
   const { question, student, studentClass, tags, submittedAt } = questionSE;
@@ -14,4 +16,14 @@ async function registerQuestion(questionSE: QuestionSE): Promise<number> {
   return id;
 }
 
-export { registerQuestion };
+async function fetchQuestion(id: number): Promise<QuestionDB> {
+  const result = await connection.query(
+    `SELECT * FROM questions WHERE id=$1;`,
+    [id]
+  );
+
+  const question: QuestionDB = result.rows[0];
+
+  return question;
+}
+export { registerQuestion, fetchQuestion };
