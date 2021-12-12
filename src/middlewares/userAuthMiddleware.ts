@@ -7,6 +7,7 @@ async function userAuthentication(
   res: Response,
   next: NextFunction
 ) {
+  console.log('hiiii');
   if (!req.headers.authorization) {
     return next();
   }
@@ -18,7 +19,7 @@ async function userAuthentication(
     if (!user) {
       return next();
     }
-    req.body = user;
+    req.body.idUser = user.id;
     next();
   } catch (error) {
     next(error);

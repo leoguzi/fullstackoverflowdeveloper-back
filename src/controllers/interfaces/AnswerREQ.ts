@@ -1,3 +1,5 @@
 export interface AnswerREQ {
-  answer: string;
+  answeredBy: number;
+  idQuestion: number;
+  answerText: string;
 }
