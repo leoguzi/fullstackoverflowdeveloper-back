@@ -34,6 +34,8 @@ async function getQuestion(req: Request, res: Response, next: NextFunction) {
 }
 
 async function answerQuestion(req: Request, res: Response, next: NextFunction) {
+  const answer: string = req.body.answer;
+
   try {
     return res.sendStatus(200);
   } catch (error) {

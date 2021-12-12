@@ -1,3 +1,3 @@
-interface AnswerREQ {
+export interface AnswerREQ {
   answer: string;
 }
