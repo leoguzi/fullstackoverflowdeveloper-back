@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as userRepository from '../repositories/usersRepository';
-import { UserDB } from '../repositories/interfaces/UserDB';
+import * as usersRepository from '../repositories/usersRepository';
 
 async function userAuthentication(
   req: Request,
@@ -15,7 +14,7 @@ async function userAuthentication(
   const token = req.headers.authorization.replace('Bearer ', '');
 
   try {
-    const user = await userRepository.fetchtUserByToken(token);
+    const user = await usersRepository.fetchtUserByToken(token);
     if (!user) {
       return next();
     }

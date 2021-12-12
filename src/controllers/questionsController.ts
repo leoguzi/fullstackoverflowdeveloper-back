@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import questionSchema from '../validation/questionSchema';
-import * as questionService from '../services/questionsService';
+import * as questionsService from '../services/questionsService';
+import * as questionsRepository from '../repositories/questionsRepository';
 import * as answersRepository from '../repositories/answersRepository';
 import * as answersService from '../services/answersService';
 import { QuestionREQ } from './interfaces/QuestionREQ';
@@ -15,7 +16,7 @@ async function newQuestion(req: Request, res: Response, next: NextFunction) {
   const question: QuestionREQ = req.body;
 
   try {
-    const id = await questionService.createQuestion(question);
+    const id = await questionsService.createQuestion(question);
     return res.status(201).send({ id: id });
   } catch (error) {
     return next(error);
@@ -28,12 +29,12 @@ async function getQuestion(req: Request, res: Response, next: NextFunction) {
   try {
     const answer = await answersRepository.fetchAnswer(idQuestion);
     if (!answer) {
-      const question = await questionService.findNotAnsweredQuestion(
+      const question = await questionsService.findNotAnsweredQuestion(
         idQuestion
       );
       return res.status(200).send(question);
     }
-    const question = await questionService.findAnsweredQuestion(answer);
+    const question = await questionsService.findAnsweredQuestion(answer);
     return res.status(200).send(question);
   } catch (error) {
     if (error instanceof QuestionsError) {
@@ -76,7 +77,8 @@ async function getNotAnsweredQuestions(
   next: NextFunction
 ) {
   try {
-    return res.sendStatus(200);
+    const result = await questionsService.findNotAnsweredQuestions();
+    return res.status(200).send(result);
   } catch (error) {
     return next(error);
   }

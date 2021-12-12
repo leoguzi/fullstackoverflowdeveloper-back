@@ -1,7 +1,6 @@
 import connection from '../database';
-
 import { QuestionSE } from '../services/interfaces/QuestionSE';
-import { QuestionDB } from '../repositories/interfaces/QuestionDB';
+import { QuestionDB } from './interfaces/QuestionDB';
 
 async function registerQuestion(questionSE: QuestionSE): Promise<number> {
   const { question, student, studentClass, tags, submittedAt } = questionSE;
@@ -9,7 +8,8 @@ async function registerQuestion(questionSE: QuestionSE): Promise<number> {
   const result = await connection.query(
     `INSERT INTO questions 
             (question, student, class, tags, submitted_at)
-                VALUES ($1, $2, $3, $4, $5) RETURNING id;`,
+                VALUES ($1, $2, $3, $4, $5) 
+                  RETURNING id;`,
     [question, student, studentClass, tags, submittedAt]
   );
   const id: number = result.rows[0].id;
@@ -26,4 +26,17 @@ async function fetchQuestion(id: number): Promise<QuestionDB> {
 
   return question;
 }
-export { registerQuestion, fetchQuestion };
+
+async function fetchNotAnsweredQuestions(): Promise<QuestionDB[]> {
+  const result = await connection.query(
+    `SELECT questions.* 
+        FROM questions 
+          LEFT JOIN answers 
+            ON questions.id=answers.id_question 
+              WHERE answers.id_question is NULL;`
+  );
+  const questionDBArr: QuestionDB[] = result.rows;
+  return questionDBArr;
+}
+
+export { registerQuestion, fetchQuestion, fetchNotAnsweredQuestions };

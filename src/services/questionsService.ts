@@ -1,10 +1,9 @@
-import * as questionRepository from '../repositories/questionRepository';
+import * as questionRepository from '../repositories/questionsRepository';
 import { QuestionREQ } from '../controllers/interfaces/QuestionREQ';
 import { QuestionSE } from './interfaces/QuestionSE';
 import { NotAnsweredQuestion } from './interfaces/NotAnsweredQuestion';
 import { AnsweredQuestion } from './interfaces/AnsweredQuestion';
 import { AnswerDB } from '../repositories/interfaces/AnswerDB';
-import { UserDB } from '../repositories/interfaces/UserDB';
 import * as usersRepository from '../repositories/usersRepository';
 import QuestionsError from '../errors/QuestionsError';
 
@@ -57,4 +56,25 @@ async function findAnsweredQuestion(
 
   return answeredQuestion;
 }
-export { createQuestion, findNotAnsweredQuestion, findAnsweredQuestion };
+
+async function findNotAnsweredQuestions(): Promise<NotAnsweredQuestion[]> {
+  const result = await questionRepository.fetchNotAnsweredQuestions();
+  console.log(result);
+  const notAnsweredQuestios: NotAnsweredQuestion[] = result.map((question) => ({
+    id: question.id,
+    question: question.question,
+    student: question.student,
+    submittedAt: question.submitted_at,
+    tags: question.tags,
+    studentClass: question.class,
+    answered: false,
+  }));
+
+  return notAnsweredQuestios;
+}
+export {
+  createQuestion,
+  findNotAnsweredQuestion,
+  findAnsweredQuestion,
+  findNotAnsweredQuestions,
+};

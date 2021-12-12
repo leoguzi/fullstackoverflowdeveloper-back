@@ -1,4 +1,5 @@
 export interface NotAnsweredQuestion {
+  id?: number;
   question: string;
   student: string;
   studentClass: string;
