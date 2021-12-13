@@ -6,7 +6,6 @@ async function userAuthentication(
   res: Response,
   next: NextFunction
 ) {
-  console.log('hiiii');
   if (!req.headers.authorization) {
     return next();
   }

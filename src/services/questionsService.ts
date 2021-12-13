@@ -12,10 +12,9 @@ async function createQuestion(questionREQ: QuestionREQ): Promise<number> {
     ...questionREQ,
     submittedAt: new Date(),
   };
-
   const result = await questionRepository.registerQuestion(questionSE);
-
-  return result;
+  const id: number = result.id;
+  return id;
 }
 
 async function findNotAnsweredQuestion(
@@ -40,7 +39,6 @@ async function findAnsweredQuestion(
   answer: AnswerDB
 ): Promise<AnsweredQuestion> {
   const question = await questionRepository.fetchQuestion(answer.id_question);
-  console.log(question);
   const answeredBy = await usersRepository.fetchtUserById(answer.id_user);
   const answeredQuestion: AnsweredQuestion = {
     question: question.question,
@@ -59,7 +57,7 @@ async function findAnsweredQuestion(
 
 async function findNotAnsweredQuestions(): Promise<NotAnsweredQuestion[]> {
   const result = await questionRepository.fetchNotAnsweredQuestions();
-  console.log(result);
+
   const notAnsweredQuestios: NotAnsweredQuestion[] = result.map((question) => ({
     id: question.id,
     question: question.question,

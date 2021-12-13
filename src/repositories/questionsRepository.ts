@@ -2,7 +2,7 @@ import connection from '../database';
 import { QuestionSE } from '../services/interfaces/QuestionSE';
 import { QuestionDB } from './interfaces/QuestionDB';
 
-async function registerQuestion(questionSE: QuestionSE): Promise<number> {
+async function registerQuestion(questionSE: QuestionSE): Promise<QuestionDB> {
   const { question, student, studentClass, tags, submittedAt } = questionSE;
 
   const result = await connection.query(
@@ -12,8 +12,8 @@ async function registerQuestion(questionSE: QuestionSE): Promise<number> {
                   RETURNING id;`,
     [question, student, studentClass, tags, submittedAt]
   );
-  const id: number = result.rows[0].id;
-  return id;
+  const newQuestion: QuestionDB = result.rows[0];
+  return newQuestion;
 }
 
 async function fetchQuestion(id: number): Promise<QuestionDB> {

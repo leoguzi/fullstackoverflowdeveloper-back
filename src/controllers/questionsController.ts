@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import questionSchema from '../validation/questionSchema';
 import * as questionsService from '../services/questionsService';
-import * as questionsRepository from '../repositories/questionsRepository';
 import * as answersRepository from '../repositories/answersRepository';
 import * as answersService from '../services/answersService';
 import { QuestionREQ } from './interfaces/QuestionREQ';
@@ -12,7 +11,6 @@ async function newQuestion(req: Request, res: Response, next: NextFunction) {
   if (questionSchema.validate(req.body).error) {
     return res.status(400).send({ message: 'Bad Request.' });
   }
-
   const question: QuestionREQ = req.body;
 
   try {
@@ -60,7 +58,7 @@ async function answerQuestion(req: Request, res: Response, next: NextFunction) {
   const answer: AnswerREQ = { answeredBy, idQuestion, answerText };
 
   try {
-    const result = await answersService.createAnswer(answer);
+    await answersService.createAnswer(answer);
 
     return res.sendStatus(200);
   } catch (error) {
