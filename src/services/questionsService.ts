@@ -63,9 +63,7 @@ async function findNotAnsweredQuestions(): Promise<NotAnsweredQuestion[]> {
     question: question.question,
     student: question.student,
     submittedAt: question.submitted_at,
-    tags: question.tags,
     studentClass: question.class,
-    answered: false,
   }));
 
   return notAnsweredQuestios;
